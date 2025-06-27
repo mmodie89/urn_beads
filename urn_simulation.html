@@ -36,6 +36,35 @@ ul.task-list li input[type="checkbox"] {
 <link href="urn_simulation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="urn_simulation_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -70,7 +99,13 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-
+<p><span class="math display">\[
+P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}
+\]</span></p>
+<p>with <span class="math inline">\(Y \sim \text{Bernoulli}(\rho)\)</span> where <span class="math inline">\(\rho\)</span> is the probability above.</p>
+<p>#| cache: true set.seed(123)</p>
+<p>urn &lt;- tibble(color = rep(c(“red”, “white”), each = 50)) shovel &lt;- slice_sample(urn, n = 50)</p>
+<p>fit_color &lt;- logistic_reg(engine = “glm”) |&gt; fit(color ~ 1, data = shovel)</p>
 
 </main>
 <!-- /main column -->

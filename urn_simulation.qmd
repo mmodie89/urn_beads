@@ -2,5 +2,49 @@
 title: "Proportion of red beads"
 author: Muhammad Mudassar
 format: html
+execute: 
+  echo: false
 ---
 
+```{r}
+#| label: fit-model
+#| cache: true
+library(tidyverse)
+library(tidymodels)
+library(broom)
+
+# Simulate urn with red and white beads
+urn <- tibble(
+  color = sample(c("red", "white"), size = 100, replace = TRUE)
+)
+
+# Sample 50 beads and convert outcome to factor
+set.seed(123)
+shovel <- slice_sample(urn, n = 50) |>
+  mutate(color = factor(color))
+
+# Fit logistic regression model
+fit_color <- logistic_reg(engine = "glm") |>
+  fit(color ~ 1, data = shovel)
+```
+
+
+```{r}
+#| message: false
+# Load the required package
+library(marginaleffects)
+library(ggplot2)
+
+# Generate predicted probabilities from the fitted logistic model
+preds <- predictions(fit_color, type = "prob")
+
+# Plot the predicted probabilities
+ggplot(preds, aes(x = predicted)) +
+  geom_histogram(binwidth = 0.05, fill = "steelblue", color = "white") +
+  labs(
+    title = "Distribution of Predicted Probabilities",
+    x = "Predicted Probability (P(color = red))",
+    y = "Count"
+  ) +
+  theme_minimal()
+```

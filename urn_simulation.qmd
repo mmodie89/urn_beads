@@ -1,0 +1,6 @@
+---
+title: "Proportion of red beads"
+author: Muhammad Mudassar
+format: html
+---
+
